@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;
 // const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.jxobuiv.mongodb.net/?retryWrites=true&w=majority`;
@@ -33,6 +33,13 @@ async function run() {
     app.get('/coffees', async(req, res) =>{
       const cursor = espressoEmporiumCoffees.find();
       const result = await cursor.toArray();
+      res.send(result)
+    })
+
+    app.get('/coffees/:id', async(req, res) =>{
+      const id = req.params.id;
+      const quries = {_id : new ObjectId(id)};
+      const result = await espressoEmporiumCoffees.findOne(quries);
       res.send(result)
     })
 
